@@ -8,30 +8,30 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import com.indago.IndagoLog;
-import org.scijava.plugin.Plugin;
 import org.scijava.log.Logger;
+import org.scijava.plugin.Plugin;
 
-import com.indago.tr2d.ui.model.Tr2dModel;
+import com.indago.IndagoLog;
+import com.indago.io.ProjectFolder;
 import com.indago.tr2d.ui.model.Tr2dWekaSegmentationModel;
 import com.indago.tr2d.ui.view.Tr2dWekaSegmentationPanel;
 
 import net.imglib2.RandomAccessibleInterval;
-import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.integer.IntType;
+import net.imglib2.type.numeric.real.DoubleType;
 
 /**
  * @author jug
  */
-@Plugin( type = Tr2dSegmentationPlugin.class, name = "Tr2d Weka Segmentation" )
-public class Tr2dWekaSegmentationPlugin implements Tr2dSegmentationPlugin {
+@Plugin( type = IndagoSegmentationPlugin.class, name = "Indago Weka Segmentation" )
+public class IndagoWekaSegmentationPlugin implements IndagoSegmentationPlugin {
 
 	JPanel panel = null;
 
-	private Tr2dModel tr2dModel;
+	private ProjectFolder projectFolder;
 	private Tr2dWekaSegmentationModel model;
 
-	public static Logger log = IndagoLog.stderrLogger().subLogger(Tr2dWekaSegmentationPlugin.class.getSimpleName());
+	public static Logger log = IndagoLog.stderrLogger().subLogger(IndagoWekaSegmentationPlugin.class.getSimpleName());
 
 	/**
 	 * @see com.indago.tr2d.plugins.seg.Tr2dSegmentationPlugin#getInteractionPanel()
@@ -59,9 +59,9 @@ public class Tr2dWekaSegmentationPlugin implements Tr2dSegmentationPlugin {
 	 * @see com.indago.tr2d.plugins.seg.Tr2dSegmentationPlugin#setTr2dModel(com.indago.tr2d.ui.model.Tr2dModel)
 	 */
 	@Override
-	public void setTr2dModel( final Tr2dModel model ) {
-		this.tr2dModel = model;
-		this.model = new Tr2dWekaSegmentationModel( tr2dModel.getSegmentationModel(), tr2dModel.getSegmentationModel().getProjectFolder() );
+	public void setProjectFolderAndData( final ProjectFolder projectFolder, final RandomAccessibleInterval< DoubleType > rawData ) {
+		this.projectFolder = projectFolder;
+		this.model = new Tr2dWekaSegmentationModel( projectFolder, rawData );
 		panel = new Tr2dWekaSegmentationPanel( this.model );
 		log.info( "Tr2dSegmentationImportPlugin is set up." );
 	}
@@ -75,7 +75,7 @@ public class Tr2dWekaSegmentationPlugin implements Tr2dSegmentationPlugin {
 	}
 
 	@Override
-	public void setLogger(Logger logger) {
+	public void setLogger(final Logger logger) {
 		log = logger;
 	}
 }

@@ -26,7 +26,7 @@ import com.indago.io.DoubleTypeImgLoader;
 import com.indago.io.IntTypeImgLoader;
 import com.indago.io.ProjectFile;
 import com.indago.io.ProjectFolder;
-import com.indago.tr2d.plugins.seg.Tr2dWekaSegmentationPlugin;
+import com.indago.tr2d.plugins.seg.IndagoWekaSegmentationPlugin;
 import com.indago.ui.bdv.BdvOwner;
 import com.indago.util.converter.IntTypeThresholdConverter;
 import com.jgoodies.common.collect.LinkedListModel;
@@ -58,8 +58,8 @@ public class Tr2dWekaSegmentationModel implements BdvOwner {
 	private final String FILENAME_PREFIX_SUM_IMGS = "sumImage";
 	private final String FILENAME_PREFIX_CLASSIFICATION_IMGS = "classificationImage";
 
-	private final Tr2dSegmentationCollectionModel model;
 	private ProjectFolder projectFolder;
+	private RandomAccessibleInterval< DoubleType > rawData;
 
 	private final Vector< ProjectFile > vecClassifierFiles = new Vector< ProjectFile >();
 	private final Vector< List< Double > > vecThresholds = new Vector< List< Double > >();
@@ -78,14 +78,12 @@ public class Tr2dWekaSegmentationModel implements BdvOwner {
 	 * @param parentFolder
 	 *
 	 */
-	public Tr2dWekaSegmentationModel( final Tr2dSegmentationCollectionModel tr2dSegmentationCollectionModel, final ProjectFolder parentFolder ) {
-		this.model = tr2dSegmentationCollectionModel;
-
+	public Tr2dWekaSegmentationModel( final ProjectFolder parentFolder, final RandomAccessibleInterval< DoubleType > rawData ) {
 		try {
 			this.projectFolder = parentFolder.addFolder( "weka" );
 		} catch ( final IOException e ) {
 			this.projectFolder = null;
-			Tr2dWekaSegmentationPlugin.log.error( "Subfolder for weka segmentation hypotheses could not be created." );
+			IndagoWekaSegmentationPlugin.log.error( "Subfolder for weka segmentation hypotheses could not be created." );
 			e.printStackTrace();
 		}
 
@@ -117,7 +115,7 @@ public class Tr2dWekaSegmentationModel implements BdvOwner {
 								final double d = Double.parseDouble( string );
 								values.add( d );
 							} catch ( final NumberFormatException nfe ) {
-								Tr2dWekaSegmentationPlugin.log.error( "savedState.cvs cannot correctly be parsed!", nfe );
+								IndagoWekaSegmentationPlugin.log.error( "savedState.cvs cannot correctly be parsed!", nfe );
 							}
 						}
 					}
@@ -142,7 +140,7 @@ public class Tr2dWekaSegmentationModel implements BdvOwner {
 						IntTypeImgLoader.loadTiffEnsureType( new File( projectFolder.getFolder(), FILENAME_PREFIX_SUM_IMGS + i + ".tif" ) );
 				mapSegmentHypotheses.put( pfClassifier, sumimg );
 			} else {
-				Tr2dWekaSegmentationPlugin.log.warn(
+				IndagoWekaSegmentationPlugin.log.warn(
 						"No segmentation results found for classifier '" + pfClassifier
 								.getFilename() + "'. Start segmentation for it if you want to use its output for tracking." );
 			}
@@ -213,11 +211,11 @@ public class Tr2dWekaSegmentationModel implements BdvOwner {
 		for ( final int idx : indices ) {
 			final ProjectFile pfClassifier = vecClassifierFiles.get( idx );
 
-			Tr2dWekaSegmentationPlugin.log
+			IndagoWekaSegmentationPlugin.log
 					.trace( String.format( "Classifier %d of %d -- %s", idx, vecClassifierFiles.size(), pfClassifier.getFilename() ) );
 
 			if ( !pfClassifier.canRead() )
-				Tr2dWekaSegmentationPlugin.log.error( String.format( "Given classifier file cannot be read (%s)", pfClassifier.getAbsolutePath() ) );
+				IndagoWekaSegmentationPlugin.log.error( String.format( "Given classifier file cannot be read (%s)", pfClassifier.getAbsolutePath() ) );
 			activateClassifier( pfClassifier );
 
 			// classify frames (if needed)
@@ -225,7 +223,7 @@ public class Tr2dWekaSegmentationModel implements BdvOwner {
 			if ( classification == null ) {
 				System.out.println( "need to segment for " + pfClassifier );
 				classification =
-						SegmentationMagic.returnClassification( getModel().getModel().getRawData(), progressListeners );
+						SegmentationMagic.returnClassification( rawData, progressListeners );
 				mapClassification.put( pfClassifier, classification );
 				IJ.save(
 						ImageJFunctions.wrap( classification, "classification image" ).duplicate(),
@@ -299,16 +297,9 @@ public class Tr2dWekaSegmentationModel implements BdvOwner {
 			vecThresholds.removeElementAt( index );
 			vecThresholds.add( index, list );
 		} else {
-			Tr2dWekaSegmentationPlugin.log.error( "setListThresholds called with invalid index!" );
+			IndagoWekaSegmentationPlugin.log.error( "setListThresholds called with invalid index!" );
 		}
 		saveStateToFile();
-	}
-
-	/**
-	 * @return the model
-	 */
-	public Tr2dSegmentationCollectionModel getModel() {
-		return model;
 	}
 
 	/**
@@ -370,7 +361,7 @@ public class Tr2dWekaSegmentationModel implements BdvOwner {
 		} catch ( final FileAlreadyExistsException faee ) {
 			projectFolder.removeFile( pf );
 			final String msg = "A classifier file with this name was already added to the segmenter!";
-			Tr2dWekaSegmentationPlugin.log.error( msg, faee );
+			IndagoWekaSegmentationPlugin.log.error( msg, faee );
 			JOptionPane.showMessageDialog(
 					null, //Tr2dContext.guiFrame,
 					"A classifier file with this name was already added to the segmenter!\n" + faee.getMessage(),
@@ -378,7 +369,7 @@ public class Tr2dWekaSegmentationModel implements BdvOwner {
 					JOptionPane.ERROR_MESSAGE );
 		} catch ( final IOException e ) {
 			projectFolder.removeFile( pf );
-			Tr2dWekaSegmentationPlugin.log.error( "Classifier could not be moved to project folder!", e );
+			IndagoWekaSegmentationPlugin.log.error( "Classifier could not be moved to project folder!", e );
 		}
 	}
 
@@ -409,7 +400,7 @@ public class Tr2dWekaSegmentationModel implements BdvOwner {
 	 *
 	 */
 	private void saveAllImageFiles() {
-		Tr2dWekaSegmentationPlugin.log.trace( "(Re-)saving image data..." );
+		IndagoWekaSegmentationPlugin.log.trace( "(Re-)saving image data..." );
 		int i = 0;
 		for ( final ProjectFile pfClassifier : vecClassifierFiles ) {
 			i++;

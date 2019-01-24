@@ -90,8 +90,7 @@ public class Tr2dWekaSegmentationPanel extends JPanel implements ActionListener,
 
 		final BdvHandlePanel bdv = new BdvHandlePanel( ( Frame ) this.getTopLevelAncestor(), Bdv
 				.options()
-				.is2D()
-				.inputTriggerConfig( model.getModel().getModel().getDefaultInputTriggerConfig() ) );
+				.is2D() );
 		model.bdvSetHandlePanel( bdv );
 
 		final JSplitPane splitPane = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT, controls, model.bdvGetHandlePanel().getViewerPanel() );

@@ -6,7 +6,7 @@ package com.indago.data.segmentation;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.indago.tr2d.plugins.seg.Tr2dWekaSegmentationPlugin;
+import com.indago.tr2d.plugins.seg.IndagoWekaSegmentationPlugin;
 
 import ij.IJ;
 import ij.ImagePlus;
@@ -40,15 +40,15 @@ public class SilentWekaSegmenter< T extends NumericType< T > > {
 		// Try to load Weka model (classifier and train header)
 		if ( false == wekaSegmentation.loadClassifier( directory + filename ) ) {
 			IJ.error( "Error when loading Weka classifier from file: " + directory + filename );
-			Tr2dWekaSegmentationPlugin.log.error( "Classifier could not be loaded from '" + directory + filename + "'." );
+			IndagoWekaSegmentationPlugin.log.error( "Classifier could not be loaded from '" + directory + filename + "'." );
 			return false;
 		}
 
-		Tr2dWekaSegmentationPlugin.log.info(
+		IndagoWekaSegmentationPlugin.log.info(
 				"Read header from " + directory + filename + " (number of attributes = " + wekaSegmentation.getTrainHeader().numAttributes() + ")" );
 
 		if ( wekaSegmentation.getTrainHeader().numAttributes() < 1 ) {
-			Tr2dWekaSegmentationPlugin.log.error( "No attributes were found on the model header loaded from " + directory + filename );
+			IndagoWekaSegmentationPlugin.log.error( "No attributes were found on the model header loaded from " + directory + filename );
 			return false;
 		}
 
@@ -98,7 +98,7 @@ public class SilentWekaSegmenter< T extends NumericType< T > > {
 		final int numFurtherThreads = ( int ) Math.ceil( ( double ) ( numProcessors - numThreads ) / raiList.size() ) + 1;
 
 		final String message = "Processing " + raiList.size() + " image files in " + numThreads + " thread(s)....";
-		Tr2dWekaSegmentationPlugin.log.info( message );
+		IndagoWekaSegmentationPlugin.log.info( message );
 		for ( final ProgressListener pl : progressListeners ) {
 			pl.resetProgress( message, raiList.size() );
 		}
@@ -138,10 +138,10 @@ public class SilentWekaSegmenter< T extends NumericType< T > > {
 										new DoubleType() );
 						raiListOutputs.set( i, rai );
 					} else {
-						Tr2dWekaSegmentationPlugin.log.warn( "One of the input images could not be classified!!!" );
+						IndagoWekaSegmentationPlugin.log.warn( "One of the input images could not be classified!!!" );
 					}
 
-					Tr2dWekaSegmentationPlugin.log.info( "Processed image " + ( i + 1 ) + " in thread " + ( numThread + 1 ) );
+					IndagoWekaSegmentationPlugin.log.info( "Processed image " + ( i + 1 ) + " in thread " + ( numThread + 1 ) );
 					for ( final ProgressListener pl : progressListeners ) {
 						pl.hasProgressed();
 					}
