@@ -20,8 +20,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import com.indago.tr2d.ui.model.Tr2dWekaSegmentationModel;
-import com.indago.tr2d.ui.util.JDoubleListTextPane;
-import com.indago.tr2d.ui.util.UniversalFileChooser;
+import com.indago.ui.util.JDoubleListTextPane;
+import com.indago.ui.util.UniversalFileChooser;
 
 import bdv.util.Bdv;
 import bdv.util.BdvHandlePanel;
