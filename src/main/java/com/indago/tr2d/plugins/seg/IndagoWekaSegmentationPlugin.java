@@ -34,17 +34,11 @@ public class IndagoWekaSegmentationPlugin implements IndagoSegmentationPlugin {
 
 	public static Logger log = IndagoLog.stderrLogger().subLogger(IndagoWekaSegmentationPlugin.class.getSimpleName());
 
-	/**
-	 * @see com.indago.tr2d.plugins.seg.Tr2dSegmentationPlugin#getInteractionPanel()
-	 */
 	@Override
 	public JPanel getInteractionPanel() {
 		return panel;
 	}
 
-	/**
-	 * @see com.indago.tr2d.plugins.seg.Tr2dSegmentationPlugin#getOutputs()
-	 */
 	@Override
 	public List< RandomAccessibleInterval< IntType > > getOutputs() {
 		final List< RandomAccessibleInterval< IntType > >  ret = new ArrayList<>();
@@ -56,9 +50,6 @@ public class IndagoWekaSegmentationPlugin implements IndagoSegmentationPlugin {
 		return ret;
 	}
 
-	/**
-	 * @see com.indago.tr2d.plugins.seg.Tr2dSegmentationPlugin#setTr2dModel(com.indago.tr2d.ui.model.Tr2dModel)
-	 */
 	@Override
 	public void setProjectFolderAndData( final ProjectFolder projectFolder, final RandomAccessibleInterval< DoubleType > rawData ) {
 		this.projectFolder = projectFolder;
@@ -67,9 +58,6 @@ public class IndagoWekaSegmentationPlugin implements IndagoSegmentationPlugin {
 		log.info( "Tr2dSegmentationImportPlugin is set up." );
 	}
 
-	/**
-	 * @see com.indago.tr2d.plugins.seg.Tr2dSegmentationPlugin#getUiName()
-	 */
 	@Override
 	public String getUiName() {
 		return "weka segmentation";
