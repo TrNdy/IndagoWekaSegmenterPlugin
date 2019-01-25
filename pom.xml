@@ -18,7 +18,7 @@
 
 	<groupId>com.indago</groupId>
 	<artifactId>IndagoWekaSegmenterPlugin</artifactId>
-	<version>0.1.4-SNAPSHOT</version>
+	<version>0.1.4</version>
 
 	<name>IndagoWekaSegmenterPlugin</name>
 	<description>Segmentation plugin for Indago projects, based on Fiji's Trainable Weka Segmentation</description>
@@ -94,7 +94,7 @@
 	<scm>
 		<connection>scm:git:git://github.com/TrNdy/Tr2dWekaSegmenterPlugin</connection>
 		<developerConnection>scm:git:git@github.com:TrNdy/Tr2dWekaSegmenterPlugin</developerConnection>
-		<tag>HEAD</tag>
+		<tag>IndagoWekaSegmenterPlugin-0.1.4</tag>
 		<url>https://github.com/TrNdy/Tr2dWekaSegmenterPlugin</url>
 	</scm>
 	<issueManagement>
