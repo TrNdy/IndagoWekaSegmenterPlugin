@@ -17,6 +17,7 @@ import com.indago.plugins.seg.IndagoSegmentationPlugin;
 import com.indago.tr2d.ui.model.Tr2dWekaSegmentationModel;
 import com.indago.tr2d.ui.view.Tr2dWekaSegmentationPanel;
 
+import net.imagej.ImgPlus;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.type.numeric.integer.IntType;
 import net.imglib2.type.numeric.real.DoubleType;
@@ -51,7 +52,7 @@ public class IndagoWekaSegmentationPlugin implements IndagoSegmentationPlugin {
 	}
 
 	@Override
-	public void setProjectFolderAndData( final ProjectFolder projectFolder, final RandomAccessibleInterval< DoubleType > rawData ) {
+	public void setProjectFolderAndData( final ProjectFolder projectFolder, final ImgPlus< DoubleType > rawData ) {
 		this.projectFolder = projectFolder;
 		this.model = new Tr2dWekaSegmentationModel( projectFolder, rawData );
 		panel = new Tr2dWekaSegmentationPanel( this.model );
