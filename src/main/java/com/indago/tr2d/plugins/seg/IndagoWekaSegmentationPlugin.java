@@ -56,7 +56,7 @@ public class IndagoWekaSegmentationPlugin implements IndagoSegmentationPlugin {
 		this.projectFolder = projectFolder;
 		this.model = new Tr2dWekaSegmentationModel( projectFolder, rawData );
 		panel = new Tr2dWekaSegmentationPanel( this.model );
-		log.info( "Tr2dSegmentationImportPlugin is set up." );
+		log.info( "IndagoWekaSegmentationPlugin is set up." );
 	}
 
 	@Override
