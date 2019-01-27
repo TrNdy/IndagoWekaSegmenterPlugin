@@ -33,7 +33,7 @@ public class IndagoWekaSegmentationPlugin implements IndagoSegmentationPlugin {
 	private ProjectFolder projectFolder;
 	private Tr2dWekaSegmentationModel model;
 
-	public static Logger log = IndagoLog.stderrLogger().subLogger(IndagoWekaSegmentationPlugin.class.getSimpleName());
+	public static Logger log = IndagoLog.log.subLogger( IndagoWekaSegmentationPlugin.class.getSimpleName() );
 
 	@Override
 	public JPanel getInteractionPanel() {
