@@ -19,7 +19,7 @@
 
 	<groupId>com.indago</groupId>
 	<artifactId>IndagoWekaSegmenterPlugin</artifactId>
-	<version>0.1.5-SNAPSHOT</version>
+	<version>0.1.6-SNAPSHOT</version>
 
 	<name>IndagoWekaSegmenterPlugin</name>
 	<description>Segmentation plugin for Indago projects, based on Fiji's Trainable Weka Segmentation</description>
